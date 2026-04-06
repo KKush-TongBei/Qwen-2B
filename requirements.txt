@@ -1,0 +1,13 @@
+# PyTorch：请按 CUDA 版本从 https://pytorch.org 安装，勿仅用本文件的 torch。
+torch
+
+# Qwen3-VL 需含 Qwen3VL 的 Transformers。若 pip 上版本不够新，请改用源码安装：
+# pip install "git+https://github.com/huggingface/transformers"
+transformers>=4.57.0
+
+accelerate>=0.34.0
+safetensors>=0.4.0
+pillow>=10.0.0
+
+# 可选：CUDA 上加速（需与 PyTorch/CUDA 匹配）
+# flash-attn
