@@ -7,6 +7,7 @@ import argparse
 import sys
 
 from app.inference import (
+    DEFAULT_IMAGE_PROMPT,
     InferenceConfig,
     InferenceConfigError,
     QwenVLDescriber,
@@ -29,7 +30,7 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--prompt",
-        default="请详细描述这张图片。",
+        default=DEFAULT_IMAGE_PROMPT,
         help="User text prompt.",
     )
     p.add_argument("--max-new-tokens", type=int, default=256)

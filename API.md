@@ -45,7 +45,7 @@ curl http://127.0.0.1:8000/health
 - Content-Type：`multipart/form-data`
 - 表单字段：
   - `image`：图片文件（必填）
-  - `prompt`：文本提示词（可选）
+  - `prompt`：文本提示词（可选）。不传、留空或仅空白时，默认使用「请详细描述图片。」
   - `max_new_tokens`：最大生成长度（可选，1-4096）
 
 请求示例：
@@ -53,7 +53,15 @@ curl http://127.0.0.1:8000/health
 ```bash
 curl -X POST "http://127.0.0.1:8000/v1/describe" \
   -F "image=@/absolute/path/to/demo.jpg" \
-  -F "prompt=请详细描述这张图片。" \
+  -F "prompt=图中有几个人？分别在哪里？" \
+  -F "max_new_tokens=256"
+```
+
+不传 `prompt` 时（使用默认描述提示）：
+
+```bash
+curl -X POST "http://127.0.0.1:8000/v1/describe" \
+  -F "image=@/absolute/path/to/demo.jpg" \
   -F "max_new_tokens=256"
 ```
 
@@ -64,7 +72,8 @@ curl -X POST "http://127.0.0.1:8000/v1/describe" \
   "text": "这是一张……",
   "model": "/path/to/Qwen3-VL-2B",
   "usage": {
-    "max_new_tokens": 256
+    "max_new_tokens": 256,
+    "prompt": "请详细描述图片。"
   }
 }
 ```

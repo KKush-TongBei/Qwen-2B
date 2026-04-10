@@ -12,6 +12,9 @@ class InferenceConfigError(ValueError):
     """Raised when inference configuration is invalid."""
 
 
+DEFAULT_IMAGE_PROMPT = "请详细描述图片。"
+
+
 @dataclass(frozen=True)
 class InferenceConfig:
     model: str

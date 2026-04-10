@@ -7,6 +7,7 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 
 from app.inference import (
+    DEFAULT_IMAGE_PROMPT,
     InferenceConfig,
     InferenceConfigError,
     QwenVLDescriber,
@@ -57,13 +58,12 @@ def health() -> dict[str, str]:
 @app.post("/v1/describe")
 async def describe(
     image: UploadFile = File(...),
-    prompt: str = Form("请详细描述这张图片。"),
+    prompt: str = Form(""),
     max_new_tokens: int = Form(256),
 ) -> dict[str, object]:
     if describer is None or not describer.is_loaded():
         raise HTTPException(status_code=503, detail="model_not_ready")
-    if not prompt.strip():
-        raise HTTPException(status_code=400, detail="prompt 不能为空。")
+    effective_prompt = prompt.strip() or DEFAULT_IMAGE_PROMPT
     if max_new_tokens <= 0 or max_new_tokens > 4096:
         raise HTTPException(status_code=400, detail="max_new_tokens 必须在 1-4096 之间。")
     if image.content_type not in ALLOWED_CONTENT_TYPES:
@@ -80,7 +80,7 @@ async def describe(
             tmp.flush()
             text = describer.describe(
                 image=tmp.name,
-                prompt=prompt,
+                prompt=effective_prompt,
                 max_new_tokens=max_new_tokens,
             )
     except InferenceConfigError as e:
@@ -91,7 +91,10 @@ async def describe(
     return {
         "text": text,
         "model": describer.model_path,
-        "usage": {"max_new_tokens": max_new_tokens},
+        "usage": {
+            "max_new_tokens": max_new_tokens,
+            "prompt": effective_prompt,
+        },
     }
 
 
