@@ -8,6 +8,9 @@ transformers>=4.57.0
 accelerate>=0.34.0
 safetensors>=0.4.0
 pillow>=10.0.0
+fastapi>=0.111.0
+uvicorn>=0.30.0
+python-multipart>=0.0.9
 
 # 可选：CUDA 上加速（需与 PyTorch/CUDA 匹配）
 # flash-attn
